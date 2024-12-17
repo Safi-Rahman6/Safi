@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mini Free Host Site</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-image: url('default-bg.jpg');
+            background-size: cover;
+            background-position: center;
+            color: #333;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        #upload-form {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        input[type="file"] {
+            margin: 10px 0;
+        }
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #upload-status {
+            margin-top: 15px;
+            font-size: 1rem;
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <h1>Mini Free Hosting Site</h1>
+    <form id="upload-form" enctype="multipart/form-data">
+        <label for="file-input">Select a file (Max: 5MB):</label><br>
+        <input type="file" id="file-input" accept="*/*" required><br>
+        <button type="button" id="upload-button">Upload</button>
+        <div id="upload-status"></div>
+    </form>
+
+    <script>
+        document.getElementById("upload-button").addEventListener("click", () => {
+            const fileInput = document.getElementById("file-input");
+            const statusDiv = document.getElementById("upload-status");
+
+            if (fileInput.files.length === 0) {
+                statusDiv.textContent = "Please select a file to upload.";
+                return;
+            }
+
+            const file = fileInput.files[0];
+            if (file.size > 5 * 1024 * 1024) { // 5 MB limit
+                statusDiv.textContent = "File size exceeds 5MB limit.";
+                statusDiv.style.color = "red";
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("file", file);
+
+            // Send to server (Replace 'upload.php' with your server script)
+            fetch('upload.php', {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                statusDiv.textContent = "File uploaded successfully: " + data;
+                statusDiv.style.color = "green";
+            })
+            .catch(err => {
+                statusDiv.textContent = "Upload failed. Try again!";
+                statusDiv.style.color = "red";
+            });
+        });
+    </script>
+</body>
+  </html>
