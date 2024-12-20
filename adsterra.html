@@ -76,7 +76,7 @@
     <!-- Ads Section -->
     <div class="ads-section">
       <h3>Ad Section</h3>
-      <button class="ad-button" onclick="startAds()">Start Viewing Ads</button>
+      <button class="ad-button" id="view-ads-button" onclick="startAds()">Start Viewing Ads</button>
       <div id="ads-viewing-status"></div>
       <div id="adsterra-ad">
         <!-- Replace with your Adsterra Ad Embed Code -->
@@ -109,13 +109,18 @@
     function startAds() {
       if (adsViewed < 15) {
         document.getElementById('ads-viewing-status').innerText = `Viewing Ad ${adsViewed + 1}...`;
-        adsTimer = setTimeout(() => {
+        // Disable button to prevent multiple clicks before next ad
+        document.getElementById('view-ads-button').disabled = true;
+
+        setTimeout(() => {
           adsViewed++;
           if (adsViewed < 15) {
-            startAds(); // Start next ad after 5 seconds
+            document.getElementById('ads-viewing-status').innerText = `Ad ${adsViewed} viewed. Click 'Start Viewing Ads' to view next ad.`;
+            document.getElementById('view-ads-button').disabled = false;
           } else {
             document.getElementById('ads-viewing-status').innerText = "All 15 Ads Viewed! Please click an ad.";
-            document.querySelector('.ad-button').innerText = "Click an Ad to Claim Reward";
+            document.getElementById('view-ads-button').innerText = "Click an Ad to Claim Reward";
+            document.getElementById('view-ads-button').disabled = false;
           }
         }, 5000); // 5 seconds per ad
       } else {
