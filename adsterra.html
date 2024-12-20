@@ -109,13 +109,8 @@
       if (adsViewed < 15) {
         adsViewed++;
         document.getElementById('ads-viewing-status').innerText = `15/${adsViewed}`;
-        setTimeout(() => {
-          // Show the ad clicked button after 5 seconds
-          if (adsViewed === 15) {
-            document.getElementById('view-ad').innerText = 'Click Ad to Get Reward';
-            document.getElementById('view-ad').onclick = adClicked; // Change the button action
-          }
-        }, 5000); // 5 seconds to view ad
+        document.getElementById('view-ad').innerText = 'Click Ad to Get Reward';
+        document.getElementById('view-ad').onclick = adClicked; // Change the button action to adClicked
       }
     }
 
@@ -138,8 +133,11 @@
             balance += 0.50; // Add $0.50 to balance
             document.querySelector('.balance').innerText = `Your Balance: $${balance.toFixed(2)}`;
             isAdClicked = false;
-            document.getElementById('view-ad').innerText = 'View Another Ad';
-            document.getElementById('view-ad').onclick = viewAd; // Reset button to view another ad
+            // After 15 ads are viewed, change button back to view another ad
+            if (adsViewed < 15) {
+              document.getElementById('view-ad').innerText = 'View Another Ad';
+              document.getElementById('view-ad').onclick = viewAd;
+            }
           }
         }, 1000); // Update every second
       } else {
@@ -176,4 +174,4 @@
     }
   </script>
 </body>
-</html>
+          </html>
