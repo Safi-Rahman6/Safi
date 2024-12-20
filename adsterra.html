@@ -71,7 +71,7 @@
 </head>
 <body>
   <div class="container">
-    <div class="balance">Your Balance: $0.00</div>
+    <div class="balance">Your Balance: $<span id="balance-value">0.00</span></div>
 
     <!-- Ads Section -->
     <div class="ads-section">
@@ -99,15 +99,22 @@
   </div>
 
   <script>
-    let adsViewed = 0;
-    let balance = 0;
+    let adsViewed = parseInt(localStorage.getItem('adsViewed')) || 0;
+    let balance = parseFloat(localStorage.getItem('balance')) || 0;
     let isAdClicked = false;
     let adClickTimer;
+
+    // Update balance in the UI and localStorage
+    function updateBalance() {
+      document.getElementById('balance-value').innerText = balance.toFixed(2);
+      localStorage.setItem('balance', balance);
+    }
 
     // Function to view an ad
     function viewAd() {
       if (adsViewed < 15) {
         adsViewed++;
+        localStorage.setItem('adsViewed', adsViewed);
         document.getElementById('ads-viewing-status').innerText = `15/${adsViewed}`;
         document.getElementById('view-ad').innerText = 'Click Ad to Get Reward';
         document.getElementById('view-ad').onclick = adClicked; // Change the button action to adClicked
@@ -131,7 +138,7 @@
             clearInterval(adClickTimer);
             document.getElementById('ads-viewing-status').innerText = "3 minutes are over! You've earned $0.50!";
             balance += 0.50; // Add $0.50 to balance
-            document.querySelector('.balance').innerText = `Your Balance: $${balance.toFixed(2)}`;
+            updateBalance(); // Update balance in localStorage and UI
             isAdClicked = false;
             // After 15 ads are viewed, change button back to view another ad
             if (adsViewed < 15) {
@@ -166,12 +173,15 @@
 
         // Update balance
         balance -= amount;
-        document.querySelector('.balance').innerText = `Your Balance: $${balance.toFixed(2)}`;
+        updateBalance(); // Update balance in localStorage and UI
         alert("Withdraw Request Submitted!");
       } else {
         alert("Insufficient balance or invalid amount.");
       }
     }
+
+    // Load initial balance and ads viewed on page load
+    updateBalance();
   </script>
 </body>
-          </html>
+</html>
