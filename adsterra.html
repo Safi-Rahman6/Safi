@@ -76,13 +76,12 @@
     <!-- Ads Section -->
     <div class="ads-section">
       <h3>Ad Section</h3>
-      <!-- Adsterra Ad Embed Code -->
+      <button class="ad-button" onclick="startAds()">Start Viewing Ads</button>
+      <div id="ads-viewing-status"></div>
       <div id="adsterra-ad">
-        <!-- Replace the link below with your Adsterra Ad Code -->
+        <!-- Replace with your Adsterra Ad Embed Code -->
         <script type="text/javascript" src="https://your-adsterra-code.js"></script>
       </div>
-      <button class="ad-button" onclick="startAds()">Start Ads Viewing</button>
-      <div id="ads-viewing-status"></div>
     </div>
 
     <!-- Withdraw Section -->
@@ -106,14 +105,17 @@
     let adsTimer;
     let adClickTimer;
 
+    // Start Ads Viewing
     function startAds() {
       if (adsViewed < 15) {
-        adsTimer = setInterval(() => {
+        document.getElementById('ads-viewing-status').innerText = `Viewing Ad ${adsViewed + 1}...`;
+        adsTimer = setTimeout(() => {
           adsViewed++;
-          document.getElementById('ads-viewing-status').innerText = `You have viewed ${adsViewed} out of 15 ads.`;
-          if (adsViewed === 15) {
-            clearInterval(adsTimer);
-            document.getElementById('ads-viewing-status').innerText = "You have completed all 15 ads!";
+          if (adsViewed < 15) {
+            startAds(); // Start next ad after 5 seconds
+          } else {
+            document.getElementById('ads-viewing-status').innerText = "All 15 Ads Viewed! Please click an ad.";
+            document.querySelector('.ad-button').innerText = "Click an Ad to Claim Reward";
           }
         }, 5000); // 5 seconds per ad
       } else {
@@ -121,6 +123,7 @@
       }
     }
 
+    // When Ad is Clicked
     function adClicked() {
       if (!isAdClicked) {
         isAdClicked = true;
@@ -144,6 +147,7 @@
       }
     }
 
+    // Withdraw Request
     function submitWithdraw() {
       const phone = document.getElementById('phone').value;
       const amount = document.getElementById('amount').value;
@@ -180,4 +184,4 @@
     }
   </script>
 </body>
-</html>
+  </html>
