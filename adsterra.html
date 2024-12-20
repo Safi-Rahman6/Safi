@@ -67,10 +67,6 @@
     .withdraw-section button:hover {
       background-color: #218838;
     }
-    .timer {
-      font-size: 18px;
-      color: red;
-    }
   </style>
 </head>
 <body>
@@ -80,9 +76,13 @@
     <!-- Ads Section -->
     <div class="ads-section">
       <h3>Ad Section</h3>
-      <button class="ad-button" onclick="startAds()">Start Viewing Ads</button>
+      <!-- Adsterra Ad Embed Code -->
+      <div id="adsterra-ad">
+        <!-- Replace the link below with your Adsterra Ad Code -->
+        <script type="text/javascript" src="https://your-adsterra-code.js"></script>
+      </div>
+      <button class="ad-button" onclick="startAds()">Start Ads Viewing</button>
       <div id="ads-viewing-status"></div>
-      <div id="adsterra-ad"></div> <!-- Placeholder for Adsterra -->
     </div>
 
     <!-- Withdraw Section -->
@@ -95,64 +95,42 @@
         <option value="nagad">Nagad</option>
         <option value="binance">Binance</option>
       </select>
-      <button onclick="submitWithdraw()">Submit</button>
+      <button onclick="submitWithdraw()">Submit Withdraw Request</button>
     </div>
   </div>
 
   <script>
     let adsViewed = 0;
     let balance = 0;
+    let isAdClicked = false;
     let adsTimer;
     let adClickTimer;
-    let isAdClicked = false;
 
-    // টেলিগ্রাম বটের টোকেন এবং ইউজার আইডি
-    const TELEGRAM_BOT_TOKEN = "YOUR_BOT_TOKEN"; // তোমার বট টোকেন
-    const TELEGRAM_USER_ID = "YOUR_USER_ID"; // তোমার ইউজার আইডি
-
-    // Ads দেখার প্রক্রিয়া শুরু
     function startAds() {
       if (adsViewed < 15) {
-        document.getElementById('ads-viewing-status').innerText = `Viewing Ad ${adsViewed + 1}/15`;
-        adsTimer = setInterval(viewAd, 5000); // প্রতি ৫ সেকেন্ডে একটি অ্যাড দেখা হবে
+        adsTimer = setInterval(() => {
+          adsViewed++;
+          document.getElementById('ads-viewing-status').innerText = `You have viewed ${adsViewed} out of 15 ads.`;
+          if (adsViewed === 15) {
+            clearInterval(adsTimer);
+            document.getElementById('ads-viewing-status').innerText = "You have completed all 15 ads!";
+          }
+        }, 5000); // 5 seconds per ad
       } else {
-        document.getElementById('ads-viewing-status').innerText = "You have viewed all ads!";
-        clearInterval(adsTimer);
+        alert("You have already viewed all 15 ads.");
       }
     }
 
-    // এক একটি অ্যাড দেখা
-    function viewAd() {
-      adsViewed++;
-      if (adsViewed <= 15) {
-        document.getElementById('ads-viewing-status').innerText = `Viewing Ad ${adsViewed}/15`;
-
-        // এখানে তোমার Adsterra কোড এম্বেড হবে
-        document.getElementById('adsterra-ad').innerHTML = `
-          <script type="text/javascript" src="https://your-adsterra-code.js"></script>
-        `;
-      }
-
-      if (adsViewed >= 15) {
-        clearInterval(adsTimer); // সব অ্যাড দেখার পর টাইমার বন্ধ
-        alert("You have viewed all 15 ads. Please click the 'Ads Clicked' button to proceed.");
-        adsViewed = 0;
-        document.getElementById('ads-viewing-status').innerText = "Ads Completed!";
-      }
-    }
-
-    // Ads Clicked হওয়ার পর ৩ মিনিট অপেক্ষা করা
     function adClicked() {
       if (!isAdClicked) {
         isAdClicked = true;
-        let timer = 180; // 3 মিনিট
+        let timer = 180; // 3 minutes
         document.getElementById('ads-viewing-status').innerText = "Please wait for 3 minutes to receive your reward...";
         adClickTimer = setInterval(() => {
           const minutes = Math.floor(timer / 60);
           const seconds = timer % 60;
           document.getElementById('ads-viewing-status').innerText = `Time remaining: ${minutes}:${seconds}`;
           timer--;
-
           if (timer < 0) {
             clearInterval(adClickTimer);
             document.getElementById('ads-viewing-status').innerText = "3 minutes are over! You've earned $0.50!";
@@ -166,27 +144,22 @@
       }
     }
 
-    // Withdraw সাবমিট করা
     function submitWithdraw() {
       const phone = document.getElementById('phone').value;
       const amount = document.getElementById('amount').value;
       const method = document.getElementById('method').value;
 
       if (balance >= amount && amount > 0) {
-        // টেলিগ্রাম বট API থেকে withdraw ডেটা পাঠানো
+        // Telegram Bot API withdraw request
         const message = `Withdraw Request Submitted! \nPhone: ${phone} \nAmount: $${amount} \nMethod: ${method}`;
-        
-        // টেলিগ্রাম API এর URL
-        const telegramUrl = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
-
-        // Fetch API ব্যবহার করে টেলিগ্রাম বট API-তে ডেটা পাঠানো
+        const telegramUrl = `https://api.telegram.org/botYOUR_BOT_TOKEN/sendMessage`; // Replace YOUR_BOT_TOKEN
         fetch(telegramUrl, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            chat_id: TELEGRAM_USER_ID,
+            chat_id: 'YOUR_USER_ID', // Replace YOUR_USER_ID
             text: message,
           }),
         })
@@ -198,10 +171,8 @@
           console.error("Error sending message to Telegram:", error);
         });
 
-        // ব্যালেন্স আপডেট করা
         balance -= amount;
         document.querySelector('.balance').innerText = `Your Balance: $${balance.toFixed(2)}`;
-
         alert("Withdraw Request Submitted!");
       } else {
         alert("Insufficient balance or invalid amount.");
