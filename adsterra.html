@@ -1,174 +1,227 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ad View and Withdraw</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-    }
-    .container {
-      background: #fff;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      width: 90%;
-      max-width: 600px;
-      text-align: center;
-    }
-    .balance {
-      font-size: 20px;
-      margin-bottom: 20px;
-      color: #007BFF;
-    }
-    .ad-button {
-      background-color: #007BFF;
-      color: #fff;
-      border: none;
-      padding: 10px 20px;
-      margin: 10px;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-    .ad-button:hover {
-      background-color: #0056b3;
-    }
-    .ads-section {
-      margin: 20px 0;
-    }
-    .withdraw-section {
-      margin-top: 30px;
-    }
-    .withdraw-section input, .withdraw-section select {
-      width: 100%;
-      padding: 10px;
-      margin: 10px 0;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
-    .withdraw-section button {
-      background-color: #28a745;
-      color: #fff;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-    .withdraw-section button:hover {
-      background-color: #218838;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ad Reward System</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #121212;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            text-align: center;
+            background: #1f1f1f;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            width: 300px;
+        }
+        .container h1 {
+            font-size: 20px;
+            color: green;
+            margin-bottom: 10px;
+        }
+        .developer {
+            font-size: 12px;
+            background-color: green;
+            padding: 5px 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            display: inline-block;
+            cursor: pointer;
+        }
+        .stats {
+            margin: 10px 0;
+        }
+        .stats p {
+            margin: 5px 0;
+            font-size: 14px;
+        }
+        .progress-circle {
+            width: 80px;
+            height: 80px;
+            border: 4px solid green;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 10px auto;
+        }
+        .progress-circle span {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .buttons button {
+            width: 90%;
+            margin: 5px 0;
+            padding: 10px;
+            font-size: 14px;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            background: green;
+            cursor: pointer;
+        }
+        .buttons button:hover {
+            background: darkorange;
+        }
+        .withdraw-section {
+            margin-top: 20px;
+            display: none;
+            padding: 20px;
+            background-color: #2a2a2a;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+        }
+        .withdraw-section input, .withdraw-section select {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 5px;
+            border: 2px solid #555;
+            background-color: #333;
+            color: #fff;
+        }
+        .withdraw-section input:focus, .withdraw-section select:focus {
+            border-color: green;
+            outline: none;
+        }
+        .withdraw-section button {
+            background-color: green;
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            margin-top: 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .withdraw-section button:hover {
+            background-color: #006400;
+        }
+        #withdraw-status {
+            color: red;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        .user-info {
+            margin: 10px 0;
+        }
+        .user-info p {
+            font-size: 14px;
+            margin: 5px 0;
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <div class="balance">Your Balance: $<span id="balance-value">0.00</span></div>
+    <div class="container">
+        <h1>Auto MoneTag Ads</h1>
+        <div class="developer" onclick="window.location.href='https://t.me/SafiRahman5'">Developer by Safi Rahman</div>
+        
+        <!-- Display User Info -->
+        <div class="user-info">
+            <p>Welcome, <span id="user-name"></span></p>
+        </div>
 
-    <!-- Ads Section -->
-    <div class="ads-section">
-      <h3>Ad Section</h3>
-      <div id="ads-viewing-status">15/1</div>
-      <button id="view-ad" class="ad-button" onclick="viewAd()">View Ad</button>
-      <div id="adsterra-ad">
-        <!-- Replace the link below with your Adsterra Ad Code -->
-        <script type="text/javascript" src="https://your-adsterra-code.js"></script>
-      </div>
+        <div class="stats">
+            <p>Watched Ads: <span id="watched-ads">0</span></p>
+            <p>Earned Points: <span id="earned-points">0</span></p>
+        </div>
+        <div class="progress-circle">
+            <span id="ads-progress">0%</span>
+        </div>
+        <div class="buttons">
+            <button id="watch-ad-btn" onclick="watchAd()">Watch Ad</button>
+            <button id="withdraw-btn" onclick="showWithdrawForm()">Withdraw</button>
+        </div>
+
+        <!-- Withdraw Section -->
+        <div class="withdraw-section" id="withdraw-section">
+            <h3 style="color: orange; margin-bottom: 15px;">Withdrawal Request</h3>
+            <input type="number" id="withdraw-amount" placeholder="Enter Points to Withdraw" />
+            <select id="payment-method">
+                <option value="bkash">Bkash</option>
+                <option value="nagad">Nagad</option>
+                <option value="manual">Manual</option>
+            </select>
+            <input type="text" id="withdraw-phone" placeholder="Enter Phone Number" />
+            <button onclick="withdrawPoints()">Withdraw</button>
+            <p id="withdraw-status"></p>
+        </div>
     </div>
 
-    <!-- Withdraw Section -->
-    <div class="withdraw-section">
-      <h3>Withdraw Funds</h3>
-      <input type="text" id="phone" placeholder="Enter your phone number">
-      <input type="number" id="amount" placeholder="Enter amount">
-      <select id="method">
-        <option value="bkash">Bkash</option>
-        <option value="nagad">Nagad</option>
-        <option value="binance">Binance</option>
-      </select>
-      <button onclick="submitWithdraw()">Submit</button>
-    </div>
-  </div>
+    <script>
+        const MIN_WITHDRAW_POINTS = 5;
+        const ADMIN_USER_ID = "YOUR_CHAT_ID"; // Replace with your Telegram Chat ID
+        const BOT_TOKEN = "YOUR_BOT_TOKEN"; // Replace with your Telegram Bot Token
+        let watchedAdsCount = 0;
+        let earnedPoints = 0.00;
 
-  <script>
-    let adsViewed = parseInt(localStorage.getItem('adsViewed')) || 0;
-    let balance = parseFloat(localStorage.getItem('balance')) || 0;
-    let isAdClicked = false;
-    let adClickTimer = null;
+        // Simulate user name from Telegram User ID
+        const telegramUserName = "@exampleUser"; // Replace with actual logic
+        document.getElementById("user-name").textContent = telegramUserName;
 
-    function updateAdsStatus() {
-      document.getElementById('ads-viewing-status').innerText = `15/${adsViewed + 1}`;
-    }
+        // Function to watch an ad and update stats
+        function watchAd() {
+            watchedAdsCount++;
+            document.getElementById('watched-ads').textContent = watchedAdsCount;
+            earnedPoints += 0.50; // Add 0.50 points per ad watched
+            document.getElementById('earned-points').textContent = earnedPoints.toFixed(2);
+            updateProgressCircle();
+        }
 
-    // View Ad function
-    function viewAd() {
-      if (adsViewed < 15) {
-        // Start 5 seconds timer for each ad
-        setTimeout(() => {
-          adsViewed++;
-          updateAdsStatus();
+        // Update progress circle
+        function updateProgressCircle() {
+            const percentage = (watchedAdsCount / 10) * 100;
+            document.getElementById('ads-progress').textContent = `${percentage}%`;
+        }
 
-          if (adsViewed === 15) {
-            alert('You have viewed all 15 ads. Click the button to earn $!');
-            document.getElementById('view-ad').innerText = 'Click Ad to Earn $';
-          } else {
-            alert('You have successfully viewed the ad. Now you can view another ad.');
-            updateAdsStatus();
-          }
-        }, 5000); // 5 seconds to watch the ad
-      } else {
-        alert('You have already viewed 15 ads. Click to earn $ by clicking the ad.');
-      }
-    }
+        // Function to show withdraw form
+        function showWithdrawForm() {
+            document.getElementById('withdraw-section').style.display = 'block';
+        }
 
-    // Ad Clicked function to receive money after 3 minutes
-    function adClicked() {
-      if (!isAdClicked && adsViewed === 15) {
-        isAdClicked = true;
-        let timer = 180; // 3 minutes timer
-        let adClickTimer = setInterval(() => {
-          const minutes = Math.floor(timer / 60);
-          const seconds = timer % 60;
-          document.getElementById('ads-viewing-status').innerText = `Time remaining: ${minutes}:${seconds}`;
-          timer--;
-          if (timer < 0) {
-            clearInterval(adClickTimer);
-            document.getElementById('ads-viewing-status').innerText = "3 minutes are over! You've earned $0.50!";
-            balance += 0.50; // Add $0.50 to balance
-            localStorage.setItem('balance', balance);
-            document.querySelector('.balance').innerText = `Your Balance: $${balance.toFixed(2)}`;
-            alert('You have earned $0.50!');
-            isAdClicked = false;
-          }
-        }, 1000);
-      } else {
-        alert('You have not completed viewing 15 ads yet!');
-      }
-    }
+        // Function to handle withdrawal
+        function withdrawPoints() {
+            const amount = parseFloat(document.getElementById('withdraw-amount').value);
+            const paymentMethod = document.getElementById('payment-method').value;
+            const phoneNumber = document.getElementById('withdraw-phone').value;
 
-    // Withdraw function
-    function submitWithdraw() {
-      const phone = document.getElementById('phone').value;
-      const amount = document.getElementById('amount').value;
-      const method = document.getElementById('method').value;
+            if (amount < MIN_WITHDRAW_POINTS) {
+                document.getElementById('withdraw-status').textContent = `Minimum withdrawal amount is ${MIN_WITHDRAW_POINTS} points.`;
+                return;
+            }
 
-      if (balance >= amount && amount > 0) {
-        alert(`Withdraw Request Submitted! \nPhone: ${phone} \nAmount: $${amount} \nMethod: ${method}`);
-        balance -= amount;
-        localStorage.setItem('balance', balance);
-        document.querySelector('.balance').innerText = `Your Balance: $${balance.toFixed(2)}`;
-      } else {
-        alert("Insufficient balance or invalid amount.");
-      }
-    }
-  </script>
+            if (amount > earnedPoints) {
+                document.getElementById('withdraw-status').textContent = `Insufficient balance. You have ${earnedPoints.toFixed(2)} points.`;
+                return;
+            }
+
+            // Send withdrawal request to admin via Telegram
+            const message = `💰 *New Withdrawal Request*\n\n📛 *Name:* ${telegramUserName}\n📱 *Phone:* ${phoneNumber}\n💳 *Method:* ${paymentMethod}\n💵 *Amount:* ${amount} points`;
+
+            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${ADMIN_USER_ID}&text=${encodeURIComponent(message)}&parse_mode=Markdown`)
+                .then(response => {
+                    if (response.ok) {
+                        alert("Withdrawal request sent successfully!");
+                        earnedPoints -= amount;
+                        document.getElementById('earned-points').textContent = earnedPoints.toFixed(2);
+                    } else {
+                        document.getElementById('withdraw-status').textContent = "Failed to send request. Try again.";
+                    }
+                })
+                .catch(error => {
+                    document.getElementById('withdraw-status').textContent = "Error connecting to Telegram API.";
+                    console.error("Telegram API Error:", error);
+                });
+        }
+    </script>
 </body>
-          </html>
+                                                                             </html>
