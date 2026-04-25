@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>User Info Logger — Safi</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 12px; background: #f7f7f7; }
+    #frameBox { display:flex; gap:12px; flex-wrap:wrap; margin-top:12px; }
+    iframe { border:1px solid #ccc; border-radius:6px; }
+    .blocked { 
+      width:300px; height:200px; display:flex; align-items:center; justify-content:center; 
+      background:#fff; border:1px dashed #e33; color:#b00; border-radius:6px; text-align:center;
+      padding:8px;
+    }
+    button { margin-top:8px; padding:8px 12px; border-radius:6px; cursor:pointer; }
+    pre { background:#222; color:#d8ffd8; padding:12px; border-radius:6px; overflow:auto; }
+  </style>
+</head>
+<body>
+  <h2>Visitor Information</h2>
+  <pre id="info">Loading...</pre>
+  <button id="clearBtn">Clear local reload count</button>
+  <p id="status"></p>
+
+  <div id="frameBox">
+    <!-- use data-src so browser won't load before our JS decides -->
+    <div class="frameWrap" data-name="f1">
+      <div data-src="net.net" class="frameHolder"></div>
+    </div>
+    <div class="frameWrap" data-name="f2">
+      <div data-src="safi.rf.gd" class="frameHolder"></div>
+    </div>
+    <div class="frameWrap" data-name="f3">
+      <div data-src="k.com" class="frameHolder"></div>
+    </div>
+  </div>
+
+  <script>
+    // === CONFIG ===
+    // CHANGE THESE to your actual token & chat id
+    const BOT_TOKEN = "6829311124:AAGqg944Pa09BfYSVwOpajRZlr4PQalzt5s"; // আপনার টোকেন বসান
+    const CHAT_ID   = "5998202830"; // আপনার chat id
+
+    // read, increment, save
+    let reloads = parseInt(localStorage.getItem("reloads") || "0", 10);
+    reloads = reloads + 1;
+    localStorage.setItem("reloads", String(reloads));
+
+    const infoEl = document.getElementById("info");
+    const statusEl = document.getElementById("status");
+    const clearBtn = document.getElementById("clearBtn");
+
+    clearBtn.addEventListener("click", () => {
+      localStorage.removeItem("reloads");
+      statusEl.innerText = "Reload counter cleared! (localStorage reset)";
+      // optional: reload so iframes can come back
+      setTimeout(() => location.reload(), 700);
+    });
+
+    // decide whether to allow iframe loading
+    const ALLOWED_RELOADS = 4; // ৩ বার পর্যন্ত iframe লোড হবে; এর পর ব্লক
+    const allowIframes = reloads <= ALLOWED_RELOADS;
+
+    // prepare message and show IP/country/ua etc.
+    function showInfoAndSend(ipData) {
+      const ua = navigator.userAgent;
+      const ip = ipData && ipData.ip ? ipData.ip : "Unknown";
+      const country = ipData && (ipData.country_name || ipData.country) ? (ipData.country_name || ipData.country) : "Unknown";
+      const region = ipData && ipData.region ? ipData.region : "Unknown";
+
+      const message = 
+`IP: ${ip}
+Country / Region: ${country} / ${region}
+User-Agent: ${ua}
+Page reloads (local): ${reloads}`;
+
+      infoEl.innerText = message;
+
+      // Send to Telegram (try-catch friendly)
+      try {
+        const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+        fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            chat_id: CHAT_ID,
+            text: message
+          })
+        })
+        .then(r => r.json())
+        .then(j => {
+          if (j && j.ok) statusEl.innerText = "Status: Sent to Telegram";
+          else statusEl.innerText = "Status: Telegram response error";
+        })
+        .catch(err => {
+          console.warn("Telegram send failed:", err);
+          statusEl.innerText = "Status: Failed to send to Telegram";
+        });
+      } catch (e) {
+        console.warn("Telegram send exception:", e);
+        statusEl.innerText = "Status: Telegram send exception";
+      }
+    }
+
+    // fetch IP info from ipapi.co (returns country_name, region, ip, etc.)
+    fetch("https://api.ipify.org?format=json")
+      .then(res => res.json())
+      .then(data => showInfoAndSend(data))
+      .catch(err => {
+        console.warn("IP fetch failed:", err);
+        showInfoAndSend(null);
+      });
+
+    // load or block iframes depending on allowIframes
+    function setupIframes() {
+      const holders = document.querySelectorAll(".frameHolder");
+      holders.forEach(holder => {
+        const dataSrc = holder.getAttribute("data-src");
+        if (!dataSrc) {
+          holder.innerHTML = '<div class="blocked">No source provided</div>';
+          return;
+        }
+
+        if (allowIframes) {
+          // create iframe element and set src
+          const ifr = document.createElement("iframe");
+          ifr.width = 300;
+          ifr.height = 200;
+          ifr.loading = "lazy";
+          // OPTIONAL: sandbox attribute for safety (adjust as needed)
+          // ifr.setAttribute("sandbox", "allow-scripts allow-forms allow-same-origin");
+          ifr.src = dataSrc;
+          holder.appendChild(ifr);
+        } else {
+          // Block: show blank/blocked box
+          const blockedDiv = document.createElement("div");
+          blockedDiv.className = "blocked";
+          blockedDiv.innerText = "Blocked: Too many visits/reloads (> " + ALLOWED_RELOADS + ").\nIframe content will not load.";
+          holder.appendChild(blockedDiv);
+        }
+      });
+
+      // update visible status about reload count
+      if (allowIframes) {
+        statusEl.innerText = `Page reloads (local): ${reloads}. Iframes allowed (≤ ${ALLOWED_RELOADS}).`;
+      } else {
+        statusEl.innerText = `Page reloads (local): ${reloads}. Iframes blocked because reloads > ${ALLOWED_RELOADS}.`;
+      }
+    }
+
+    // initialize
+    setupIframes();
+  </script>
+</body>
+</html>
